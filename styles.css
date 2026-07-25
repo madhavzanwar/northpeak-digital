@@ -456,8 +456,8 @@ img, svg { display: block; max-width: 100%; }
   left: 0;
   color: var(--brass-dark);
 }
-.price-featured .btn-primary { background: var(--brass); border-color: var(--brass); color: var(--ink); }
-.price-featured .btn-primary:hover { background: var(--brass-dark); }
+.price-featured .btn-primary { background: var(--brass-dark); border-color: var(--brass-dark); color: var(--white); }
+.price-featured .btn-primary:hover { background: #6a531f; }
 
 /* ============================================
    Contact
