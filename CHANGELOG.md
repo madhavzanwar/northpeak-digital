@@ -14,8 +14,6 @@ This site was built performance- and accessibility-first rather than bolted on a
 | `prefers-reduced-motion` respected globally | Not a raw speed win, but it's the kind of detail Lighthouse's "Best Practices" adjacent checks and real users notice. |
 | Sticky header uses `backdrop-filter` sparingly, not a scroll-linked JS effect | Avoids JS-driven scroll listeners, which are a common source of jank on lower-end phones. |
 
-**What to actually do for Task B:** open the deployed URL in Chrome DevTools → Lighthouse → run Performance + Accessibility (mobile + desktop) → screenshot both reports. Given the payload size and lack of render-blocking assets described above, this should land at or above 90 on both without further work — but confirm with the real report, since Lighthouse also factors in your specific hosting's TTFB (Netlify/Vercel/GitHub Pages are all fine here).
-
 ## Accessibility
 
 | Change | Why it helps |
@@ -29,13 +27,24 @@ This site was built performance- and accessibility-first rather than bolted on a
 | Mobile nav toggle uses `aria-expanded` + `aria-controls`, updates on open/close | Announces menu state changes to assistive tech. |
 | Touch targets (buttons, nav links, form fields) sized comfortably above the 44px minimum on mobile | Reduces mis-taps for motor-impaired and mobile users generally. |
 
+## Fixes made after the initial Lighthouse run
+
+- **Contrast failure fixed:** the featured pricing card's "Start here" button had dark ink text on a gold background, measuring 4.1:1 — below the 4.5:1 minimum for normal text. Changed to white text on the darker brass shade, now 5.6:1.
+- **Unused font weight removed:** Fraunces 700 was being requested from Google Fonts but never referenced anywhere in the CSS (only 500 and 600 are used). Dropping it trims payload and shortens the render-blocking font request.
+
 ## What I'd do differently
 
-Honest note for the walkthrough: the hero's animated contour background is a nice signature element, but on very low-end devices four layered SVG paths with opacity blending could be simplified to two if a real device test shows any jank — I didn't have a physical low-end Android to test against, only DevTools throttling.
+The hero's animated contour background is a nice signature element, but on very low-end devices four layered SVG paths with opacity blending could be simplified to two if a real device test shows any jank — I didn't have a physical low-end Android to test against, only DevTools throttling.
 
-## Your remaining steps (can't be done for you)
+Best Practices sits at 81 because of missing security headers (CSP, HSTS, COOP, XFO) — these are set at the server/hosting level, not in the code, and GitHub Pages doesn't expose custom header config. Deploying behind Netlify or Cloudflare instead would close this gap.
 
-1. Deploy (see `README.md`).
-2. Run Lighthouse in Chrome DevTools on the live URL (mobile + desktop), screenshot both.
-3. Record a 2–3 min Loom: point out (a) the contour-line hero as the signature visual choice, (b) the inline error/`aria-live` form validation, (c) zero-dependency JS/CSS keeping the payload tiny — then name one thing you'd change (e.g. the contour animation note above, or your own observation).
-4. Submit the live URL + repo link per the task kit instructions.
+## Final Lighthouse scores
+
+**Desktop:** Performance 100 · Accessibility 96 · Best Practices 81 · SEO 100
+**Mobile:** Performance 98 · Accessibility 96 · Best Practices 81 · SEO 100
+
+The first mobile run scored 81 on Performance, but Lighthouse itself flagged that a Chrome extension was interfering with the page load — re-ran in an Incognito window (no extensions) for a clean result.
+
+## Walkthrough
+
+🎥(https://photos.app.goo.gl/8bF1wi4iGreRRaQw6)
